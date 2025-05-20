@@ -1,10 +1,17 @@
 
 const carrito = document.getElementById("carrito");
 const template = document.getElementById("template");
+const footer = document.getElementById("footer");
+const footerTemplate = document.getElementById("templateFooter");
 const fragment = document.createDocumentFragment();
-const agregar  = document.querySelectorAll(".card .btn");
 
 const carritoObjeto=[];
+
+
+document.addEventListener("click", (e) => {
+    console.log(e.target.matches(".card button"));
+});
+
 
 const agregarAlCarrito = (e)=>{
     
@@ -26,17 +33,9 @@ const agregarAlCarrito = (e)=>{
       }else{
          carritoObjeto[index].cantidad++;
       }
-
-     //  if(carritoObjeto.hasOwnProperty(producto.id)){
-     //      producto.cantidad = carritoObjeto[producto.id].cantidad + 1;
-     //  }
-
-      //carritoObjeto[producto.id] = producto;
-
     pintarCarrito(carritoObjeto);
 };
 
-agregar.forEach((boton) => boton.addEventListener("click", agregarAlCarrito));
 
 const pintarCarrito = (array) => {
      carrito.textContent = "";
