@@ -89,6 +89,14 @@ formulario.addEventListener("submit", function (e) {
 
     pintarAlerta();
 
+    const formData = new FormData(formulario);
+    
+    for(let item of formData){
+        console.log(item);
+    }
+
+
+
 
 
    
