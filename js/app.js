@@ -1,125 +1,104 @@
 
-const carrito = document.getElementById("carrito");
-const template = document.getElementById("template");
-const footer = document.getElementById("footer");
-const footerTemplate = document.getElementById("templateFooter");
-const fragment = document.createDocumentFragment();
-
-let carritoObjeto=[];
+const formulario = document.getElementById("formulario");
+const userName = document.getElementById("userName");
+const userEmail = document.getElementById("userEmail");
 
 
-document.addEventListener("click", (e) => {
-    console.log(e.target.matches(".card .btn-outline-primary"));
-    if(e.target.matches(".card .btn-outline-primary")){
-        agregarAlCarrito(e);
+const alertName = document.getElementById("alertName");
+const alertEmail = document.getElementById("alertEmail");
+const alertSuccess = document.getElementById("alertSuccess");
+
+const regexEmail = /^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$/;
+const soloLetras = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/;
+
+
+const pintarAlerta = () => {
+console.log("pintarAlerta");
+ alertSuccess.classList.remove("d-none");
+ alertSuccess.textContent = "Formulario enviado correctamente";
+
+};
+
+
+const pintarMensajeError = (errores) => {
+
+errores.forEach((item) => {
+
+    item.tipo.classList.remove("d-none");   
+    item.tipo.textContent = item.msg;
+
+
+});
+
+};
+
+
+
+formulario.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const errores = [];
+
+
+     alertSuccess.classList.add("d-none");
+
+    // Validar nombre
+    if (!userName.value.trim() || !soloLetras.test(userName.value)) {
+
+        userName.classList.add("is-invalid", "alert-danger");
+
+        errores.push({
+            tipo:alertName,
+            msg:'Formato no valido en el campo nombre, solo letras'
+         });
+
+    } else{
+ 
+        
+        
+        userName.classList.add("is-valid");       
+        userName.classList.remove("is-invalid", "alert-danger");
+        alertName.classList.add("d-none")
+        console.log(alertName);
     }
 
-    if(e.target.matches("#carrito .list-group-item .btn-success")){
-        aumentarCarrito(e);
+    // Validar email
+    if (!userEmail.value.trim() || !regexEmail.test(userEmail.value)) {
+       
+       userEmail.classList.add("is-invalid", "alert-danger");
+
+       errores.push({
+            tipo:alertEmail,
+            msg:'Escriba un correo valido'
+         });
+
+    }else{
+        
+        
+        alertEmail.classList.add("d-none");
+        userEmail.classList.add("is-valid");       
+        userEmail.classList.remove("is-invalid", "alert-danger");
+  
     }
 
-    if(e.target.matches("#carrito .list-group-item .btn-danger")){
-        disminuirCarrito(e);
+
+    if(errores.length!==0){
+            pintarMensajeError(errores);
+            return
+
     }
+
+    pintarAlerta();
+
+
+
+   
 });
 
 
-let agregarAlCarrito = (e)=>{
-    
-     console.log(e.target.dataset.fruta);
-
-     const producto = {
-         titulo: e.target.dataset.fruta,
-             id: e.target.dataset.fruta,
-             precio:e.target.dataset.precio,
-            cantidad: 1,
-      };
-
-      console.log(carritoObjeto);
-
-      const index = carritoObjeto.findIndex((item) => item.id === producto.id);
-
-      console.log(index);     
-      
-      if(index===-1){
-          carritoObjeto.push(producto);
-          
-        }else{
-            carritoObjeto[index].cantidad++;
-        }
-        pintarCarrito();
-};
-
-
-const aumentarCarrito = (e) => {
-
-    
-    carritoObjeto.map((item) => {
-        if(item.id === e.target.dataset.id){
-            item.cantidad++;
-        }
-        return item;
-    });    
-    
-    pintarCarrito();
-
-};
-
-const disminuirCarrito = (e) => {
-  
-    
-    carritoObjeto = carritoObjeto.filter( item => {
-        if(item.id === e.target.dataset.id){
-            
-            item.cantidad--;
-            if(item.cantidad===0) return;
-            return item;
-        
-        }else{
-
-            return item;
-        }        
-    });
-    
-
-
-    pintarCarrito(carritoObjeto);
-}
-
-
-const pintarFooter = () => {
-
-    footer.textContent = "";
-    const total = carritoObjeto.reduce((acc, el) => acc + (el.precio * el.cantidad), 0);
-
-    if(total === 0){
-        footer.textContent = "";
-    }else{
-       const clone = footerTemplate.content.cloneNode(true);
-       clone.querySelector(".lead span").textContent =total;
-       fragment.appendChild(clone);
-       footer.appendChild(fragment);
-    }
-   
-
-};
 
 
 
-const pintarCarrito = () => {
-     carrito.textContent = "";
- 
-     carritoObjeto.forEach((item) => {
-         const clone = template.content.cloneNode(true);
-         clone.querySelector(".lead").textContent = item.titulo;
-         clone.querySelector(".rounded-pill").textContent = item.cantidad;
-         clone.querySelector("div .lead span").textContent = item.cantidad * item.precio;
-         clone.querySelector(".btn-danger").dataset.id = item.id;
-         clone.querySelector(".btn-success").dataset.id = item.id;
 
-         fragment.appendChild(clone);
-     });
-     carrito.appendChild(fragment);
 
-     pintarFooter();
- };
+
+
