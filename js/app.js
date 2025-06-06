@@ -26,15 +26,12 @@ const fetchData = async () => {
             const clone = templateCard.cloneNode(true);
             clone.querySelector('.card-title').textContent = element.name;  
             clone.querySelector('.card-text').textContent = element.species;
-             clone.querySelector('.lead').textContent = element.origin.name;
+            clone.querySelector('.lead').textContent = element.origin.name;
             clone.querySelector('.card-img-top').setAttribute('src', element.image);            
             fragment.appendChild(clone);
        
         });
         cars.appendChild(fragment);
-
-
-
           
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -50,11 +47,12 @@ const loadingData = (estado) => {
     const loading = document.getElementById('loading');
     if(estado){
 
-        loading.classList.remove('d-none');
-       
+        loading.classList.remove('d-none');       
 
     }else{
+
        loading.classList.add('d-none');
+       
     }
 
 
