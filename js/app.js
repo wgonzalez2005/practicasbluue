@@ -1,59 +1,131 @@
-const cars = document.getElementById('card-dinamicas');
-const templateCard = document.getElementById('template-card').content;
-const fragment = document.createDocumentFragment();
+
+const formularios = document.getElementById('formularios');
+
+const pintarestudiantes   = document.getElementById('tarjetas-estudiantes');
+const pintarprofesores   = document.getElementById('tarjetas-profesores');
+
+const templateEstudiante = document.getElementById('templateEstudiante').content;
+const templateProfesor   = document.getElementById('templateProfesor').content;
 
 
-document.addEventListener('DOMContentLoaded', () => {
-   
+
+const estudiantes = [];
+const profesores = [];
+
+formularios.addEventListener('submit', e => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const [nombre,edad,opcion] = [...formData.values()];
     
-   fetchData();
+   if(opcion==="Estudiante"){
 
+    const estudiante = new Estudiante(nombre,edad);
+    estudiantes.push(estudiante);
+    Persona.pintaPersonaUI(estudiantes,opcion);
+
+   }else{
+
+    const profesor = new Profesor(nombre,edad);
+    profesores.push(profesor);
+    Persona.pintaPersonaUI(profesores,opcion);
+
+   }
 
 });
 
-const fetchData = async () => {
-    //  console.log('Fetching data...');
-    try {
-       
-        loadingData(true);
 
-        const res = await fetch('https://rickandmortyapi.com/api/character');
-        const resultado = await res.json();
-        
-        resultado.results.forEach(element => {
-            // console.log(element);
-            console.log(element.name);
-            const clone = templateCard.cloneNode(true);
-            clone.querySelector('.card-title').textContent = element.name;  
-            clone.querySelector('.card-text').textContent = element.species;
-            clone.querySelector('.lead').textContent = element.origin.name;
-            clone.querySelector('.card-img-top').setAttribute('src', element.image);            
-            fragment.appendChild(clone);
-       
-        });
-        cars.appendChild(fragment);
-          
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }finally {
-        console.log('Fetch completed');
-        loadingData(false);
+// document.addEventListener("click,e =>{
+
+// })
+
+
+
+
+class Persona{
+    constructor(nombre, edad) {
+        this.nombre = nombre;
+        this.edad = edad;
+    }
+
+    static pintaPersonaUI(persona,tipo) {
+
+        if (tipo === 'Estudiante') {
+
+            pintarestudiantes.textContent = '';
+            const fragment = document.createDocumentFragment();
+            
+            persona.forEach(item=>{
+                fragment.appendChild(item.obtenerCloneEstudiante())
+            })
+                
+            pintarestudiantes.appendChild(fragment);
+
+        } else if (tipo === 'Profesor') {
+            pintarprofesores.textContent = '';
+            const fragment = document.createDocumentFragment();
+            
+            persona.forEach(item=>{
+                fragment.appendChild(item.obtenerCloneProfesor())
+            })
+                
+            pintarprofesores.appendChild(fragment);
+        }        
     }
 }
 
+class Estudiante extends Persona {
+    #estado = false
+    #estudiante="Estudiante"
 
-const loadingData = (estado) => {
-
-    const loading = document.getElementById('loading');
-    if(estado){
-
-        loading.classList.remove('d-none');       
-
-    }else{
-
-       loading.classList.add('d-none');
-       
+    set setEstado(estado) {
+        this.#estado = estado;
+    }
+    get getEstado() {
+        return this.#estado;
+    }
+    set setEstudiante(Estudiante) {
+        this.#estudiante=estudiante;
+    }
+    get getEstudiante() {
+        return this.#estudiante;
     }
 
+    obtenerCloneEstudiante(){
+       const clone = templateEstudiante.cloneNode(true);
+       clone.querySelector('h5 .text-primary').textContent = this.nombre;
+       clone.querySelector('p.text-secondary').textContent = "Edad: " +this.edad; 
+       clone.querySelector('h6').textContent = this.getEstudiante; 
+
+       if(this.#estado){
+        clone.querySelector('.badge').className = "badge bg-success"
+        clone.querySelector('.btn-success').disabled = true
+        clone.querySelector('.btn-danger').disabled = true
+
+       }else{
+
+        clone.querySelector('.badge').className = "badge bg-danger"
+        clone.querySelector('.btn-danger').disabled = true
+        clone.querySelector('.btn-success').disabled = false
+
+       }
+
+       clone.querySelector('.badge').textContent = this.#estado ? "Aprobado" : "Reprobado"
+
+           
+
+       return clone
+    }
+}
+
+class Profesor extends Persona {
+
+    obtenerCloneProfesor(){
+       const clone = templateProfesor.cloneNode(true);
+       clone.querySelector('h5 .text-white').textContent = this.nombre;
+       clone.querySelector('p.text-white').textContent = "Edad: " +this.edad;      
+
+       return clone
+    }
 
 }

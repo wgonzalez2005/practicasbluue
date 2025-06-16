@@ -1,61 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous"
-    />
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Practica de API REST</title>
-  </head>
-  <body>
-    <div class="container my-5">
-      <!-- Esinner Cargando -->
-      <section class="d-flex align-items-center d-none" id="loading">
-        <strong>Cargando...</strong>
-        <div
-          class="spinner-border ms-auto"
-          role="status"
-          aria-hidden="true"
-        ></div>
-      </section>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+</head>
 
-      <section class="row" id="card-dinamicas">
+<body>
+  <h1>Tarjeta de Estudiantes y Profesores</h1>
 
-    
+  <section class="container mt-4">
+    <form id="formularios">
+      <input type="text" class="form-control mb-2" value="Wilson Gonzalez" name="nombre" placeholder="Ingrese Nombre" required />
+      <input type="number" value="30" class="form-control mb-2" name="edad" required />
+      <select name="opcion" class="form-select mb-2">
+        <option value="Estudiante" selected="selected">Estudiante</option>
+        <option value="Profesor">Profesor</option>
+      </select>
+      <button type="submit" class="btn btn-primary">Agregar</button>
 
-       
-      </section>
-    </div>
-     <template id="template-card">
-             <article class="col-12 col-md-6 col-lg-3 mb-3">
+    </form>
+    <div class="row mt-4" >
+       <div class="col-6" id="tarjetas-estudiantes">
+        
+      </div>
+       <div class="col-6" id="tarjetas-profesores">  
 
-          <div class="card text-center shadow">
-            <img
-              src="https://rickandmortyapi.com/api/character/avatar/1.jpeg"
-              class="card-img-top"
-              alt="Imagen aleatoria"
-            />
-            <div class="card-body">
-              <h5 class="card-title text-primary">Nombre del personaje</h5>
-              <p class="card-text">
-               Human
-              </p>
-              <p class="card-text lead">
-               Origin
-              </p>
+       </div>
+  </section>
+
+  <template id="templateEstudiante">
+   
+     <article class="card mb-2">
+          <div class="card-body">
+            <h5>
+              <span class="text-primary">Juanito</span>
+              <span class="badge bg-success">Aprobado</span>
+            </h5>
+            <h6>
+              Estudiante
+            </h6>
+            <p class="text-secondary">Edad: <span class="text-secondary"></span></p>
+            <div class="card-foot">
+              <button class="btn btn-success btn-sm">Aprobar</button>
+              <button class="btn btn-danger btn-sm">Reprobar</button>
             </div>
           </div>
-          
-        </article>
-        </template> 
-    <script src="js/app.js"></script>
-  </body>
+      
+        </article>  
+      
+  </template>
+
+  <template id="templateProfesor">
+      <article class="card mb-2 bg-dark text-white">
+          <div class="card-body">
+            <h5>
+              <span class="text-white">Profesor juanito</span>
+              
+            </h5>
+            <h6>
+              Profesor
+            </h6>
+            <p class="text-white"></p>
+   
+          </div>
+      
+        </article>  
+  </template>
+  
+
+
+  <script src="js/app.js"></script>
+</body>
+
 </html>
