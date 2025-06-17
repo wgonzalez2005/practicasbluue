@@ -12,10 +12,14 @@
 </head>
 
 <body>
-  <h1>Tarjeta de Estudiantes y Profesores</h1>
-
+  
   <section class="container mt-4">
+    <h1>Tarjeta de Estudiantes y Profesores</h1>
+   
     <form id="formularios">
+      <div class="alert alert-danger d-none">
+        Algunos campos estan vacios
+      </div>
       <input type="text" class="form-control mb-2" value="Wilson Gonzalez" name="nombre" placeholder="Ingrese Nombre" required />
       <input type="number" value="30" class="form-control mb-2" name="edad" required />
       <select name="opcion" class="form-select mb-2">

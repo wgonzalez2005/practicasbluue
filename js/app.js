@@ -7,7 +7,7 @@ const pintarprofesores   = document.getElementById('tarjetas-profesores');
 const templateEstudiante = document.getElementById('templateEstudiante').content;
 const templateProfesor   = document.getElementById('templateProfesor').content;
 
-
+const alert = document.querySelector(".alert");
 
 const estudiantes = [];
 const profesores = [];
@@ -17,6 +17,15 @@ formularios.addEventListener('submit', e => {
     const formData = new FormData(e.target);
 
     const [nombre,edad,opcion] = [...formData.values()];
+
+    alert.classList.add("d-none");
+
+   if(!nombre.trim() || !edad.trim() || !opcion.trim()){
+
+     alert.classList.remove("d-none");
+     return false;
+   }
+
     
    if(opcion==="Estudiante"){
 
@@ -35,15 +44,40 @@ formularios.addEventListener('submit', e => {
 });
 
 
-// document.addEventListener("click,e =>{
+document.addEventListener("click",e =>{
 
-// })
+if(e.target.dataset.uid){
+
+    if(e.target.matches(".btn-success")){
+        estudiantes.map(item=>{
+            if(item.uid == e.target.dataset.uid){
+               item.setEstado=true;
+            }
+            return item;
+        });
+    }
+
+     if(e.target.matches(".btn-danger")){
+        estudiantes.map(item=>{
+            if(item.uid == e.target.dataset.uid){
+               item.setEstado=false;
+            }
+            return item;
+        });
+
+    }
+    Persona.pintaPersonaUI(estudiantes,"Estudiante");
+}
+
+
+});
 
 
 
 
 class Persona{
     constructor(nombre, edad) {
+        this.uid=""+Date.now()
         this.nombre = nombre;
         this.edad = edad;
     }
@@ -92,25 +126,31 @@ class Estudiante extends Persona {
     }
 
     obtenerCloneEstudiante(){
+    
        const clone = templateEstudiante.cloneNode(true);
        clone.querySelector('h5 .text-primary').textContent = this.nombre;
        clone.querySelector('p.text-secondary').textContent = "Edad: " +this.edad; 
        clone.querySelector('h6').textContent = this.getEstudiante; 
 
        if(this.#estado){
-        clone.querySelector('.badge').className = "badge bg-success"
-        clone.querySelector('.btn-success').disabled = true
-        clone.querySelector('.btn-danger').disabled = true
+
+        clone.querySelector(".badge").className = "badge bg-success";
+        clone.querySelector(".btn-success").disabled = true;
+        clone.querySelector(".btn-danger").disabled = false;
+        console.log(clone.querySelector(".btn-danger"));
 
        }else{
 
-        clone.querySelector('.badge').className = "badge bg-danger"
-        clone.querySelector('.btn-danger').disabled = true
-        clone.querySelector('.btn-success').disabled = false
+        clone.querySelector(".badge").className = "badge bg-danger";
+        clone.querySelector(".btn-danger").disabled = true;
+        clone.querySelector(".btn-success").disabled = false;
 
        }
+       clone.querySelector('.btn-success').dataset.uid =this.uid;
+       clone.querySelector('.btn-danger').dataset.uid =this.uid;
+       
 
-       clone.querySelector('.badge').textContent = this.#estado ? "Aprobado" : "Reprobado"
+       clone.querySelector('.badge').textContent = this.#estado ? "Aprobado" : "Reprobado";
 
            
 
