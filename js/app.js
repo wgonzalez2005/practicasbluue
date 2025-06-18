@@ -1,171 +1,92 @@
+const formulario   = document.querySelector("#formulario");
+const pintartodo   = document.querySelector("#pintartodo");
+const templatetodo = document.querySelector("#templatetodo").content;
+const mensaje      = document.querySelector("div.alert");
 
-const formularios = document.getElementById('formularios');
 
-const pintarestudiantes   = document.getElementById('tarjetas-estudiantes');
-const pintarprofesores   = document.getElementById('tarjetas-profesores');
+let elementos=[];
+elementos=JSON.parse(localStorage.getItem("elementos"));
 
-const templateEstudiante = document.getElementById('templateEstudiante').content;
-const templateProfesor   = document.getElementById('templateProfesor').content;
 
-const alert = document.querySelector(".alert");
-
-const estudiantes = [];
-const profesores = [];
-
-formularios.addEventListener('submit', e => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-
-    const [nombre,edad,opcion] = [...formData.values()];
-
-    alert.classList.add("d-none");
-
-   if(!nombre.trim() || !edad.trim() || !opcion.trim()){
-
-     alert.classList.remove("d-none");
-     return false;
-   }
-
+document.addEventListener("click",e=>{
     
-   if(opcion==="Estudiante"){
 
-    const estudiante = new Estudiante(nombre,edad);
-    estudiantes.push(estudiante);
-    Persona.pintaPersonaUI(estudiantes,opcion);
-
-   }else{
-
-    const profesor = new Profesor(nombre,edad);
-    profesores.push(profesor);
-    Persona.pintaPersonaUI(profesores,opcion);
-
-   }
-
-});
-
-
-document.addEventListener("click",e =>{
-
-if(e.target.dataset.uid){
-
-    if(e.target.matches(".btn-success")){
-        estudiantes.map(item=>{
-            if(item.uid == e.target.dataset.uid){
-               item.setEstado=true;
-            }
-            return item;
-        });
-    }
-
-     if(e.target.matches(".btn-danger")){
-        estudiantes.map(item=>{
-            if(item.uid == e.target.dataset.uid){
-               item.setEstado=false;
-            }
-            return item;
+    if(e.target.dataset.id){
+        elementos=JSON.parse(localStorage.getItem("elementos"));
+        
+        const index = elementos.map((item)=>{
+            return item.id;
         });
 
-    }
-    Persona.pintaPersonaUI(estudiantes,"Estudiante");
-}
+        const h = index.indexOf(e.target.dataset.id);
+        elementos.splice(h,1) 
+        
+       localStorage.setItem("elementos",JSON.stringify(elementos));
+       Datos.pintarElementos();
 
+    }
+
+})
+
+
+formulario.addEventListener("submit", e =>{
+    e.preventDefault(); 
+        
+    mensaje.classList.add("d-none");
+    const data = new FormData(formulario);
+    const [todo] = [...data.values()];
+
+    if(!todo.trim()){
+        mensaje.classList.remove("d-none");
+        return;
+    }
+  
+    elementos.push(new Datos(todo));
+
+    localStorage.setItem("elementos",JSON.stringify(elementos));
+    Datos.pintarElementos();
 
 });
 
 
 
-
-class Persona{
-    constructor(nombre, edad) {
-        this.uid=""+Date.now()
-        this.nombre = nombre;
-        this.edad = edad;
+class Datos{
+    constructor(todo){
+        this.id=""+Date.now(),
+        this.todo=todo
     }
 
-    static pintaPersonaUI(persona,tipo) {
-
-        if (tipo === 'Estudiante') {
-
-            pintarestudiantes.textContent = '';
-            const fragment = document.createDocumentFragment();
-            
-            persona.forEach(item=>{
-                fragment.appendChild(item.obtenerCloneEstudiante())
-            })
-                
-            pintarestudiantes.appendChild(fragment);
-
-        } else if (tipo === 'Profesor') {
-            pintarprofesores.textContent = '';
-            const fragment = document.createDocumentFragment();
-            
-            persona.forEach(item=>{
-                fragment.appendChild(item.obtenerCloneProfesor())
-            })
-                
-            pintarprofesores.appendChild(fragment);
-        }        
+    set setTodo(todo){
+        this.todo=todo
     }
-}
-
-class Estudiante extends Persona {
-    #estado = false
-    #estudiante="Estudiante"
-
-    set setEstado(estado) {
-        this.#estado = estado;
-    }
-    get getEstado() {
-        return this.#estado;
-    }
-    set setEstudiante(Estudiante) {
-        this.#estudiante=estudiante;
-    }
-    get getEstudiante() {
-        return this.#estudiante;
+    get getTodo(){
+        return this.todo
     }
 
-    obtenerCloneEstudiante(){
-    
-       const clone = templateEstudiante.cloneNode(true);
-       clone.querySelector('h5 .text-primary').textContent = this.nombre;
-       clone.querySelector('p.text-secondary').textContent = "Edad: " +this.edad; 
-       clone.querySelector('h6').textContent = this.getEstudiante; 
+    get getId(){
+        return this.id
+    }
 
-       if(this.#estado){
+    static pintarElementos(){
+        pintartodo.textContent="";
+        const ele = JSON.parse(localStorage.getItem("elementos"));
+        const fragment = document.createDocumentFragment();
+        
+        ele.forEach(item => {
+            console.log(item);
+            const clone = templatetodo.cloneNode(true);          
+            clone.querySelector(".lead").textContent = item.todo;
+            clone.querySelector(".btn-danger").dataset.id = item.id; 
+            fragment.appendChild(clone);
 
-        clone.querySelector(".badge").className = "badge bg-success";
-        clone.querySelector(".btn-success").disabled = true;
-        clone.querySelector(".btn-danger").disabled = false;
-        console.log(clone.querySelector(".btn-danger"));
+        });       
 
-       }else{
+        pintartodo.appendChild(fragment);        
 
-        clone.querySelector(".badge").className = "badge bg-danger";
-        clone.querySelector(".btn-danger").disabled = true;
-        clone.querySelector(".btn-success").disabled = false;
-
-       }
-       clone.querySelector('.btn-success').dataset.uid =this.uid;
-       clone.querySelector('.btn-danger').dataset.uid =this.uid;
-       
-
-       clone.querySelector('.badge').textContent = this.#estado ? "Aprobado" : "Reprobado";
-
-           
-
-       return clone
     }
 }
 
-class Profesor extends Persona {
+Datos.pintarElementos();
 
-    obtenerCloneProfesor(){
-       const clone = templateProfesor.cloneNode(true);
-       clone.querySelector('h5 .text-white').textContent = this.nombre;
-       clone.querySelector('p.text-white').textContent = "Edad: " +this.edad;      
 
-       return clone
-    }
 
-}

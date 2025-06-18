@@ -11,75 +11,33 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
 </head>
 
-<body>
-  
-  <section class="container mt-4">
-    <h1>Tarjeta de Estudiantes y Profesores</h1>
-   
-    <form id="formularios">
-      <div class="alert alert-danger d-none">
-        Algunos campos estan vacios
-      </div>
-      <input type="text" class="form-control mb-2" value="Wilson Gonzalez" name="nombre" placeholder="Ingrese Nombre" required />
-      <input type="number" value="30" class="form-control mb-2" name="edad" required />
-      <select name="opcion" class="form-select mb-2">
-        <option value="Estudiante" selected="selected">Estudiante</option>
-        <option value="Profesor">Profesor</option>
-      </select>
-      <button type="submit" class="btn btn-primary">Agregar</button>
+<body> 
 
-    </form>
-    <div class="row mt-4" >
-       <div class="col-6" id="tarjetas-estudiantes">
-        
-      </div>
-       <div class="col-6" id="tarjetas-profesores">  
+  <section class="container">
+   <h5>TODO APP</h5>
+   <form id="formulario">
+    <div class="alert alert-danger d-none">No se puede enviar el campo vacio</div>
+    <input type="text" value="todo 1" class="form-control mb-2" name="todo" placeholder="Ingrese un todo" required>
+    <button type="submit" class="btn btn-success w-100 mb-2">Agregar</button>
+   </form>
+  </section>
+  <section id="pintartodo">
 
-       </div>
   </section>
 
-  <template id="templateEstudiante">
-   
-     <article class="card mb-2">
-          <div class="card-body">
-            <h5>
-              <span class="text-primary">Juanito</span>
-              <span class="badge bg-success">Aprobado</span>
-            </h5>
-            <h6>
-              Estudiante
-            </h6>
-            <p class="text-secondary">Edad: <span class="text-secondary"></span></p>
-            <div class="card-foot">
-              <button class="btn btn-success btn-sm">Aprobar</button>
-              <button class="btn btn-danger btn-sm">Reprobar</button>
-            </div>
-          </div>
+  <template id="templatetodo" class="">
+     <article class="alert alert-warning d-flex align-items-center justify-content-between m-2">
       
-        </article>  
-      
+      <p class="lead mb-0">Lorem ipsum</p>
+      <div>
+        <button class="btn btn-danger">Borrar</button>
+      </div>
+    </article>
   </template>
 
-  <template id="templateProfesor">
-      <article class="card mb-2 bg-dark text-white">
-          <div class="card-body">
-            <h5>
-              <span class="text-white">Profesor juanito</span>
-              
-            </h5>
-            <h6>
-              Profesor
-            </h6>
-            <p class="text-white"></p>
-   
-          </div>
-      
-        </article>  
-  </template>
-  
 
 
-  <script src="js/app.js"></script>
+  <script src="js/app.js" type="module"></script>
 </body>
 
 </html>
